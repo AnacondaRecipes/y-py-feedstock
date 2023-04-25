@@ -1,5 +1,5 @@
 {% set name = "y-py" %}
-{% set version = "0.6.0" %}
+{% set version = "0.5.9" %}
 
 package:
   name: {{ name }}
@@ -7,36 +7,41 @@ package:
 
 source:
   url: https://pypi.io/packages/source/y/y_py/y_py-{{ version }}.tar.gz
-  sha256: 46836169f7dc2957df8513cfe4bc2009175b3a473e630af421a8e75ee1c48f98
+  sha256: 50cfa0532bcee27edb8c64743b49570e28bb76a00cd384ead1d84b6f052d9368
 
 build:
   number: 0
+  skip: True # [s390x]
   script:
-    - {{ PYTHON }} -m pip install . -vv
+    - {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - maturin >=0.13,<0.14                   # [build_platform != target_platform]
+    - python
+    - maturin >=0.13,<0.14
     - {{ compiler('c') }}
     - {{ compiler('rust') }}
     - cargo-bundle-licenses
   host:
-    - maturin >=0.13,<0.14
+    - maturin =0.13.7
     - pip
     - python
+    - wheel
   run:
     - python
 
 test:
-  requires:
-    - pip
-  commands:
-    - pip check
+  source_files:
+    - tests
   imports:
     - y_py
+  requires:
+    - pip
+    - pytest
+  commands:
+    - pip check
+    - python -m pytest -vv
 
 about:
   home: https://github.com/y-crdt/ypy
@@ -46,7 +51,9 @@ about:
     - LICENSE
     - THIRDPARTY.yml
   summary: Python bindings for the Rust port of Yjs
+  description: Ypy is a Python binding for Y-CRDT. It provides distributed data types that enable real-time collaboration between devices. Ypy can sync data with any other platform that has a Y-CRDT binding, allowing for seamless cross-domain communication.
   dev_url: https://github.com/y-crdt/ypy
+  doc_url: https://ypy.readthedocs.io
 
 extra:
   recipe-maintainers:
