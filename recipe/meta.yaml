@@ -15,6 +15,8 @@ build:
   script:
     - {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+  ignore_run_exports:
+    - python
 
 requirements:
   build:
@@ -29,11 +31,14 @@ requirements:
     - python
     - wheel
   run:
+    # this is needed otherwise import y_py in tests fails with ModuleNotFoundError
     - python
 
 test:
   source_files:
-    - tests
+    # There doesn't seem to be a smaller subset of the directory that works on windows.
+    - tests # [ not win ]
+    - .     # [ win ]
   imports:
     - y_py
   requires:
