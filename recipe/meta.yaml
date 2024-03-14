@@ -38,6 +38,7 @@ requirements:
   run:
     # this is needed otherwise import y_py in tests fails with ModuleNotFoundError
     - python
+    - __osx >=10.12     # [osx and x86_64]
 
 test:
   source_files:
