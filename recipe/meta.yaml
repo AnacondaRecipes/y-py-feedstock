@@ -19,10 +19,10 @@ build:
     - python
 
 requirements:
-  build:
-    run_exports: # [osx and x86_64]
-        strong_constrains: # [osx and x86_64]
-          - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.12") }}  # [osx and x86_64]
+  # build:
+  #   run_exports: # [osx and x86_64]
+  #       strong_constrains: # [osx and x86_64]
+  #         - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.12") }}  # [osx and x86_64]
   build:
     - python
     - maturin >=1.2.3,<2
