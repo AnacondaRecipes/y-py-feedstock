@@ -11,3 +11,5 @@ MACOSX_DEPLOYMENT_TARGET:   # [osx and x86_64]
   - "10.12"                 # [osx and x86_64]
 rust_compiler_version:
   - 1.76.0
+CONDA_BUILD_SYSROOT:
+  - /opt/MacOSX10.12.sdk    # [osx and x86_64]
