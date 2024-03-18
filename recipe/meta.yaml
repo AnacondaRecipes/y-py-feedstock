@@ -10,6 +10,9 @@ source:
   sha256: 4757a82a50406a0b3a333aa0122019a331bd6f16e49fed67dca423f928b3fd4d
 
 build:
+  run_exports: # [osx and x86_64]
+    strong_constrains: # [osx and x86_64]
+      - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.12") }}  # [osx and x86_64]
   number: 0
   skip: True # [s390x]
   script:
@@ -19,10 +22,6 @@ build:
     - python
 
 requirements:
-  build:
-    run_exports: # [osx and x86_64]
-        strong_constrains: # [osx and x86_64]
-          - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.12") }}  # [osx and x86_64]
   build:
     - python
     - maturin >=1.2.3,<2
