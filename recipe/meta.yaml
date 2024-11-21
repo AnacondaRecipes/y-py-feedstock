@@ -10,7 +10,7 @@ source:
   sha256: 4757a82a50406a0b3a333aa0122019a331bd6f16e49fed67dca423f928b3fd4d
 
 build:
-  number: 0
+  number: 1
   skip: True # [s390x]
   script:
     - {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
@@ -20,7 +20,6 @@ build:
 
 requirements:
   build:
-    - python
     - maturin >=1.2.3,<2
     - {{ compiler('c') }}
     - {{ compiler('rust') }}
