@@ -10,33 +10,32 @@ source:
   sha256: 4757a82a50406a0b3a333aa0122019a331bd6f16e49fed67dca423f928b3fd4d
 
 build:
-  number: 2
-  skip: True # [s390x]
+  number: 3
+  # Upstream doesn't support py314; the last update was 3 years ago (9/04/2026).
+  # The latest src release v0.7.0-alpha.1 doesn't support py314 either.
+  # WARN: Building for py314 with the current upstream breaks the ABI.
+  skip: true  # [py<37 or py>=314]
   script:
-    - {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vvv
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-  ignore_run_exports:
-    - python
 
 requirements:
   build:
-    - maturin >=1.2.3,<2
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('rust') }}
+    - maturin >=1.2.3,<2
     - cargo-bundle-licenses
   host:
     - maturin >=1.2.3,<2
     - pip
     - python
   run:
-    # this is needed otherwise import y_py in tests fails with ModuleNotFoundError
     - python
 
 test:
   source_files:
-    # There doesn't seem to be a smaller subset of the directory that works on windows.
-    - tests # [ not win ]
-    - .     # [ win ]
+    - tests
   imports:
     - y_py
   requires:
@@ -44,7 +43,7 @@ test:
     - pytest
   commands:
     - pip check
-    - python -m pytest -vv
+    - pytest -ra -v tests
 
 about:
   home: https://github.com/y-crdt/ypy
@@ -54,7 +53,11 @@ about:
     - LICENSE
     - THIRDPARTY.yml
   summary: Python bindings for the Rust port of Yjs
-  description: Ypy is a Python binding for Y-CRDT. It provides distributed data types that enable real-time collaboration between devices. Ypy can sync data with any other platform that has a Y-CRDT binding, allowing for seamless cross-domain communication.
+  description: |
+    Ypy is a Python binding for Y-CRDT. It provides distributed data
+    types that enable real-time collaboration between devices.
+    Ypy can sync data with any other platform that has a Y-CRDT binding,
+    allowing for seamless cross-domain communication.
   dev_url: https://github.com/y-crdt/ypy
   doc_url: https://ypy.readthedocs.io
 
